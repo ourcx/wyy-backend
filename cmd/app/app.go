@@ -2,10 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"wyy/index"
 	"wyy/internal/config"
-	//"wyy/internal/handler"
+	"wyy/internal/handler"
 	"wyy/internal/repo"
-	//"wyy/internal/service"
+	"wyy/internal/service"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -29,28 +32,29 @@ func NewApp(cfgPath string) (*App, error) {
 		return nil, fmt.Errorf("init db: %w", err)
 	}
 
-	//// 3. 初始化路由（同时完成依赖注入）
-	//router := setupRouter(db)
+	// 3. 设置 Gin 模式（从配置读取）
+	gin.SetMode(cfg.Server.Mode) // 例如 "debug" 或 "release"
+
+	// 4. 创建 Gin 引擎（不使用默认中间件，我们手动添加）
+	engine := gin.New()
+
+	// 5. 依赖注入：创建各层实例
+	userRepo := repo.NewUserRepo(db)
+	userService := service.NewUserService(userRepo)
+	userHandler := handler.NewUserHandler(userService)
+
+	// 6. 注册路由（将 handler 传入）
+	route.RegisterRoutes(engine, userHandler)
 
 	return &App{
-		cfg: cfg,
-		db:  db,
-		//router: router,
+		cfg:    cfg,
+		db:     db,
+		router: engine,
 	}, nil
 }
 
-//func setupRouter(db *gorm.DB) *gin.Engine {
-//	// 初始化各层
-//	userRepo := repo.NewUserRepo(db)
-//	userService := service.NewUserService(userRepo)
-//	userHandler := handler.NewUserHandler(userService)
-//
-//	router := gin.Default()
-//	router.POST("/register", userHandler.Register)
-//	// 其他路由...
-//	return router
-//}
-
 func (a *App) Run() error {
-	return a.router.Run(fmt.Sprintf(":%d", a.cfg.Server.Port))
+	addr := fmt.Sprintf(":%d", a.cfg.Server.Port)
+	log.Printf("Server starting on %s", addr)
+	return a.router.Run(addr)
 }
