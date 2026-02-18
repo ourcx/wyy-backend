@@ -7,8 +7,8 @@ database:
   host: localhost
   port: 3306
   user: root
-  password: secret
-  dbname: myapp
+  password: 3277975910
+  dbname: agent
   max_open_conns: 100
   max_idle_conns: 10
 
