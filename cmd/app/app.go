@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"wyy/index"
+	route "wyy/index"
 	"wyy/internal/config"
 	"wyy/internal/handler"
 	"wyy/internal/repo"

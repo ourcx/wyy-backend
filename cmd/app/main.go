@@ -1,3 +1,8 @@
+// @title			Wyy API
+// @version		1.0
+// @description	音乐项目 API 文档
+// @host			localhost:8080
+// @BasePath		/api
 package main
 
 import (

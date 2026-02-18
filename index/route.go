@@ -5,6 +5,10 @@ import (
 	"wyy/internal/handler"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "wyy/cmd/app/docs"
 )
 
 // RegisterRoutes 注册所有路由
@@ -18,8 +22,20 @@ func RegisterRoutes(r *gin.Engine, userHandler *handler.UserHandler) {
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	//文档路由
 
-	// 示例：用户相关路由
+	// PingExample godoc
+	// @Summary      ping example
+	// @Description  do ping
+	// @Tags         test
+	// @Accept       json
+	// @Produce      json
+	// @Success      200  {string}  string  "pong"
+	// @Router       /api/ping [get]
+	r.GET("/api/ping", func(c *gin.Context) {
+		c.String(200, "pong")
+	})
 	users := r.Group("/api/users")
 	{
 		users.POST("/register", userHandler.Register)

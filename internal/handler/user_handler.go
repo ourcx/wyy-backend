@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"wyy/internal/service"
+
+	"github.com/gin-gonic/gin"
 )
 
 type UserHandler struct {
@@ -15,7 +16,18 @@ func NewUserHandler(userService *service.UserService) *UserHandler {
 	return &UserHandler{userService: userService}
 }
 
-// Register 处理用户注册请求
+// Register 注册
+//
+//	@Summary		注册
+//	@Description	注册新用户
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		RegisterRequest	true	"注册信息"
+//	@Success		201		{object}	UserResponse
+//	@Failure		400		{object}	ErrorResponse
+//	@Failure		500		{object}	ErrorResponse
+//	@Router			/api/users/register [post]
 func (h *UserHandler) Register(c *gin.Context) {
 	var req struct {
 		Name     string `json:"name" binding:"required"`
@@ -41,7 +53,17 @@ func (h *UserHandler) Register(c *gin.Context) {
 	})
 }
 
-// Login 处理登录请求
+// Login 登录
+//
+//	@Summary		登录
+//	@Description	用户登录
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		LoginRequest	true	"登录信息"
+//	@Success		200		{object}	UserResponse
+//	@Failure		401		{object}	ErrorResponse
+//	@Router			/api/users/login [post]
 func (h *UserHandler) Login(c *gin.Context) {
 	var req struct {
 		Email    string `json:"email" binding:"required,email"`
@@ -66,7 +88,18 @@ func (h *UserHandler) Login(c *gin.Context) {
 	})
 }
 
-// GetUser 获取用户信息
+// GetUser godoc
+//
+//	@Summary		获取用户
+//	@Description	根据ID获取用户信息
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"用户ID"
+//	@Success		200	{object}	UserResponse
+//	@Failure		400	{object}	ErrorResponse
+//	@Failure		404	{object}	ErrorResponse
+//	@Router			/api/users/{id} [get]
 func (h *UserHandler) GetUser(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.ParseInt(idStr, 10, 64)
