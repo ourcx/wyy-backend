@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 	"strconv"
+	"wyy/internal/domain"
 	"wyy/internal/service"
 
 	"github.com/gin-gonic/gin"
@@ -29,11 +30,7 @@ func NewUserHandler(userService *service.UserService) *UserHandler {
 //	@Failure		500		{object}	ErrorResponse
 //	@Router			/api/users/register [post]
 func (h *UserHandler) Register(c *gin.Context) {
-	var req struct {
-		Name     string `json:"name" binding:"required"`
-		Email    string `json:"email" binding:"required,email"`
-		Password string `json:"password" binding:"required,min=6"`
-	}
+	var req domain.UserRegister
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -65,10 +62,7 @@ func (h *UserHandler) Register(c *gin.Context) {
 //	@Failure		401		{object}	ErrorResponse
 //	@Router			/api/users/login [post]
 func (h *UserHandler) Login(c *gin.Context) {
-	var req struct {
-		Email    string `json:"email" binding:"required,email"`
-		Password string `json:"password" binding:"required"`
-	}
+	var req domain.UserLogin
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -123,4 +117,11 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 		"name":  user.Name,
 		"email": user.Email,
 	})
+}
+
+// GetOwnUser godoc
+//
+// @Sumary    用户查询自己的信息
+func (h *UserHandler) GetOwnUser(c *gin.Context) {
+
 }
