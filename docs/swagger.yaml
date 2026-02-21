@@ -45,6 +45,20 @@ info:
   title: Wyy API
   version: "1.0"
 paths:
+  /api/recommends/banners:
+    get:
+      description: 返回 Banner 图片 URL 列表（当前为假数据）
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功返回 banners 列表
+          schema:
+            additionalProperties: true
+            type: object
+      summary: 获取推荐 Banner
+      tags:
+      - 推荐模块
   /api/users/{id}:
     get:
       consumes:

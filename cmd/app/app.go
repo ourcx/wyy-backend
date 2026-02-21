@@ -19,6 +19,7 @@ import (
 	"wyy/internal/service"
 	service2 "wyy/internal/service/discover"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -45,9 +46,29 @@ func NewApp(cfgPath string) (*App, error) {
 	// 3. 设置 Gin 模式
 	gin.SetMode(cfg.Server.Mode)
 
-	// 4. 创建 Gin 引擎并添加中间件
+	// 4. 创建 Gin 引擎
 	engine := gin.New()
-	engine.Use(gin.Logger(), gin.Recovery())
+
+	//engine.Use(cors.New(cors.Config{
+	//	AllowOrigins: []string{
+	//		"http://localhost:3004",
+	//	},
+	//	// 允许的 HTTP 方法
+	//	AllowMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+	//	// 允许的请求头
+	//	AllowHeaders: []string{
+	//		"Origin",
+	//		"Content-Type",
+	//		"Accept",
+	//		"Authorization",
+	//		"X-Requested-With",
+	//	},
+	//	// 允许浏览器携带凭证（如 Cookie）
+	//	AllowCredentials: true,
+	//	// 预检请求的缓存时间（秒）
+	//	MaxAge: 12 * time.Hour,
+	//}))
+	engine.Use(cors.Default()) // 允许所有源，但不支持 AllowCredentials:true
 
 	// 5. 依赖注入
 	userRepo := repo.NewUserRepo(db)
@@ -58,9 +79,10 @@ func NewApp(cfgPath string) (*App, error) {
 	recommendService := service2.NewRecommendService(recommendRepo)
 	recommendHandler := handler2.NewRecommendHandler(recommendService)
 
-	// 6. 注册路由（以分组方式）
-	route.RegisterRoutes(engine, userHandler, recommendHandler)
+	// 6. 注册路由
+	route.RegisterRoutes(engine, userHandler, recommendHandler) // 确认函数签名匹配
 
+	// 返回 App 实例
 	return &App{
 		cfg:    cfg,
 		db:     db,

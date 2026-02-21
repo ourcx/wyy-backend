@@ -15,6 +15,27 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/recommends/banners": {
+            "get": {
+                "description": "返回 Banner 图片 URL 列表（当前为假数据）",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "推荐模块"
+                ],
+                "summary": "获取推荐 Banner",
+                "responses": {
+                    "200": {
+                        "description": "成功返回 banners 列表",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/users/login": {
             "post": {
                 "description": "用户登录",
