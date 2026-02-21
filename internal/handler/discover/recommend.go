@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"net/http"
 	service "wyy/internal/service/discover"
+	"wyy/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,7 +35,6 @@ func (h *RecommendHandler) getReBanners(c *gin.Context) {
 	banners := []string{
 		"https://p5.music.126.net/obj/wonDlsKUwrLClGjCm8Kx/78326360541/d092/1425/a80f/5ee0ef793063a2f70d3001d5cacc517c.jpg",
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"banners": banners,
-	})
+	//包装的返回值对象
+	utils.Success(c, banners)
 }
