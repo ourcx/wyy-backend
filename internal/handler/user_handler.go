@@ -17,6 +17,15 @@ func NewUserHandler(userService *service.UserService) *UserHandler {
 	return &UserHandler{userService: userService}
 }
 
+func (h *UserHandler) RegisterRoutes(r gin.IRouter) {
+	users := r.Group("/users")
+	{
+		users.POST("/register", h.Register)
+		users.POST("/login", h.Login)
+		users.GET("/:id", h.GetUser)
+	}
+}
+
 // Register 注册
 //
 //	@Summary		注册
