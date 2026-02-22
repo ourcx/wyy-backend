@@ -11,3 +11,5 @@ type RecommendService struct {
 func NewRecommendService(RecommendRepo *repo.RecommendRepo) *RecommendService {
 	return &RecommendService{RecommendRepo: RecommendRepo}
 }
+
+//推荐核心模块

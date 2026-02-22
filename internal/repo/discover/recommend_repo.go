@@ -11,3 +11,5 @@ func NewRecommendRepo(db *gorm.DB) *RecommendRepo {
 		db: db,
 	}
 }
+
+//推荐系统核心设计
